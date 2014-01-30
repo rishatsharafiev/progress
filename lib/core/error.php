@@ -23,48 +23,41 @@ class Error extends Exception
   *     
   * @return void
   */
-  public function Error()
+  public function Error($message = '', $code = 0)
   {
-    
+    $this->message = $message;
+    $this->code = $code;
   }
-}
 
-/**
-* ошибки возникающие из-за несоотвествия типов
-*
-* @package    lib
-* @subpackage core
-* @copyright  Copyright (c) 2014 rishatsharafiev
-* @license    The MIT License (MIT) 
-* @author     rishatsharafiev <sharafiev.webmoney@gmail.com>
-* @link       https://github.com/rishatsharafiev/progress
-* @since      0.1.0
-*
-* @version    0.1.0
-*/
-class TypeError extends Error
-{
   /**
   * конструктор
   *     
   * @return void
   */
-  public function TypeError()
-  {
+  public static function production() {
     
+  }
+
+  public static function development($exception) {
+    echo "----------------------------------------------------------------------------------------<br>
+          <b>message: </b>".$exception->getMessage()."<br>
+          <b>code: </b>".$exception->getCode()."<br>
+          <b>file: </b>".$exception->getFile()."<br>
+          <b>line: </b>".$exception->getLine()."<br>";
+
+    echo "----------------------------------------------------------------------------------------<br>
+          <b>traceback</b>";
+
+    $trace = explode('#', $exception->getTraceAsString());
+    foreach($trace as $value){
+      echo $value."<br>";
+    }
+
+    echo "----------------------------------------------------------------------------------------<br>";
   }
 }
 
-/*
-function Production() {
-  echo "prod";
-}
-
-function Development() {
-  echo "dev";
-}
-
-set_exception_handler(MODE == 'development' ? 'Development' : 'Production');
-*/
+$dev_mode = (isset($dev_mode)) ? $dev_mode : 'production';
+set_exception_handler($dev_mode === 'development' ? 'Error::development' : 'Error::production');
 
 ?>

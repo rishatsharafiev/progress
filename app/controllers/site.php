@@ -12,7 +12,7 @@
 * @version    0.1.0
 */
 
-class site 
+class site
 {
   /**
   * конструктор
@@ -21,7 +21,7 @@ class site
   */
   public function site()
   {
-    
+    echo "site</br>";
   }
 
   /**
@@ -33,7 +33,7 @@ class site
   */
   public function index()
   {
-    
+    echo "site_index</br>";
   }
 
 }

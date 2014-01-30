@@ -16,6 +16,10 @@
 // rm -rf ./docs && phpdoc -d . -t ./docs --template="clean"
 // rm -rf ./docs && phpdoc -d . -t ./docs --template="responsive-twig"
 
+$t = microtime();
+// development mode
+$dev_mode = 'development';
+
 require("lib/progress.php");
 require("lib/middleware/session.php");
 require("lib/middleware/cookie.php");
@@ -26,8 +30,6 @@ require("lib/middleware/mysql.php");
 $app = new Progress();
 
 // configuration
-define('MODE', 'development');
-
 $app->configure('production', function(){
   require("lib/middleware/cache.php");
 });
@@ -38,8 +40,7 @@ $app->configure('development', function(){
 
 // routing
 $app->get('\/', function(){
-  Progress::run('crack', 'index');
-
+  Progress::run('site', 'index');
 });
 
 $app->get('\/site', function(){
@@ -57,7 +58,8 @@ $app->post('\/request', function(){
 });
 
 $app->error(function(){
-  Progress::run('error', 'index');
+  Progress::run('site', 'index');
 });
 
+echo microtime()-$t;
 ?>

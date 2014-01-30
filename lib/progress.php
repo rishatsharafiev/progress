@@ -38,13 +38,15 @@ class Progress
   {
     $file = 'app/controllers/'.$controller.'.php';
     if (file_exists($file)) {
-      if (require_once($file)) {
-        (new $controller())->$action();
-      } else {
-        throw new Exception();
-      }
+      if(!require_once($file)) throw new Error("file isn't exists");
+
+      if (class_exists($controller)) $controller = new $controller();
+      else throw new Error("controller isn't exists");
+
+      if (method_exists($controller, $action)) $controller->$action();
+      else throw new Error("method isn't exists");
     } else {
-      throw new Exception();
+      throw new Error("file of controller not found");
     }
   }
 
@@ -82,7 +84,7 @@ class Progress
       if (is_callable($callback)) {
         $callback();
       } else {
-        throw new Exception("isn't callable");
+        throw new Error("callback isn't callable");
       }
     }
   }
@@ -99,7 +101,8 @@ class Progress
   */
   public function configure($mode, $callback)
   {
-    if (MODE === $mode) {
+    global $dev_mode;
+    if ($dev_mode === $mode) {
       $callback();
     }
   }
